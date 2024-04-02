@@ -1,14 +1,25 @@
-import Welcome from "../../views/Welcome";
 import { useLocation, Outlet } from "react-router-dom";
+import Welcome from "./../../views/Welcome";
+import Navigation from "../Navigation";
+import Footer from "./../Footer";
 
 const DefaultLayout = () => {
   const location = useLocation();
 
   return (
-    <div className="default-layout">
-      {/* Your dashboard layout elements here (header, sidebar, etc.) */}
+    <div className='default-layout'>
+      {
+        <>
+          <Navigation />
+        </>
+      }
       {location.pathname === "/" && <Welcome />}
       <Outlet />
+      {
+        <>
+          <Footer />
+        </>
+      }
     </div>
   );
 };

@@ -1,12 +1,11 @@
+import Hero from './../components/Hero';
+
 function Welcome() {
-    return (
-      <>
-        <div className="text-5xl">
-          Welcome
-        </div>
-      </>
-    )
-  }
-  
-export default Welcome
-  
+  return (
+    <>
+      <Hero />
+    </>
+  );
+}
+
+export default Welcome;
