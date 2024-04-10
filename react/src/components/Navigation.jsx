@@ -1,6 +1,5 @@
 import {
   Navbar,
-  NavbarBrand,
   NavbarCollapse,
   NavbarLink,
   NavbarToggle,
@@ -8,20 +7,19 @@ import {
 import DiscordButton from "./DiscordButton";
 import NavProfile from "./NavProfile";
 import { StateContext } from "../contexts/ContextProvider";
-import { useContext, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { Link } from "react-router-dom";
 
 export default function Navigation() {
   const { user, token } = useContext(StateContext);
-
   const [stateToken, setStateToken] = useState(false);
 
-  if (token) {
-    setStateToken(true);
-  }
-
+  useEffect(() => {
+    setStateToken(!!token);
+  }, [token]);
   return (
-    <Navbar className='' fluid rounded>
-      <NavbarBrand href='https://flowbite-react.com'>
+    <Navbar fluid rounded>
+      <Link className='flex items-center' to={"/"}>
         <img
           src='/assets/images/icon.png'
           className='mr-3 h-6 sm:h-9'
@@ -30,9 +28,9 @@ export default function Navigation() {
         <span className='self-center whitespace-nowrap text-xl font-semibold'>
           FitNow
         </span>
-      </NavbarBrand>
+      </Link>
       <div className='flex md:order-last'>
-        {stateToken ? <NavProfile /> : <DiscordButton />}
+        {stateToken ? <NavProfile user={user} /> : <DiscordButton />}
         <NavbarToggle />
       </div>
       <NavbarCollapse>

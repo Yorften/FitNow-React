@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSessionRequest;
 use App\Http\Requests\UpdateSessionRequest;
+use App\Http\Resources\SessionResource;
 use App\Models\Session;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,7 @@ class SessionController extends Controller
 
     public function index()
     {
-        $sessions = Session::where('user_id', Auth::id())->get();
+        $sessions = Session::where('user_id', Auth::id())->paginate(7);
 
         if (count($sessions) == 0) {
             return response()->json([
@@ -20,9 +21,9 @@ class SessionController extends Controller
             ], 404);
         }
 
-        return response()->json([
-            'sessions' => $sessions,
-        ], 200);
+        return SessionResource::collection(
+            $sessions
+        );
     }
 
 
@@ -32,15 +33,11 @@ class SessionController extends Controller
         $sessionById = Session::where('id', $slug)->first();
 
         if (!is_null($sessionById)) {
-            return response()->json([
-                'session' => $sessionById,
-            ], 200);
+            return new SessionResource($sessionById);
         }
 
         if (!is_null($sessionBySlug)) {
-            return response()->json([
-                'session' => $sessionBySlug,
-            ], 200);
+            return new SessionResource($sessionBySlug);
         }
     }
 
@@ -69,11 +66,11 @@ class SessionController extends Controller
             if ($sessionById->status == 'FINISHED') {
                 return response()->json([
                     'message' => 'You can\'t update a finished session.',
-                ], 200);
+                ], 403);
             }
             $sessionById->update($validated);
             return response()->json([
-                'message' => 'The session has benn updated succesfully.',
+                'message' => 'The session has been updated succesfully.',
             ], 200);
         }
 
@@ -81,11 +78,11 @@ class SessionController extends Controller
             if ($sessionBySlug->status == 'FINISHED') {
                 return response()->json([
                     'message' => 'You can\'t update a finished session.',
-                ], 200);
+                ], 403);
             }
             $sessionBySlug->update($validated);
             return response()->json([
-                'message' => 'The session has benn updated succesfully.',
+                'message' => 'The session has been updated succesfully.',
             ], 200);
         }
     }
@@ -134,14 +131,14 @@ class SessionController extends Controller
             $sessionById->delete();
             return response()->json([
                 'message' => 'The session has been deleted successfully.',
-            ], 200);
+            ], 204);
         }
 
         if (!is_null($sessionBySlug)) {
             $sessionBySlug->delete();
             return response()->json([
                 'message' => 'The session has been deleted successfully.',
-            ], 200);
+            ], 204);
         }
     }
 }

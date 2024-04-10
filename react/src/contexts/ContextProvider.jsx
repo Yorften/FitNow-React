@@ -1,5 +1,4 @@
 import { createContext, useState } from "react";
-// import { useContext } from "react";
 
 export const StateContext = createContext({
   user: null,
@@ -15,7 +14,7 @@ export const ContextProvider = ({ children }) => {
   const setToken = (token) => {
     _setToken(token);
     if (token) {
-      localStorage.setItem("ACCESS_TOKEN", "token");
+      localStorage.setItem("ACCESS_TOKEN", token);
     } else {
       localStorage.removeItem("ACCESS_TOKEN");
     }
@@ -35,4 +34,4 @@ export const ContextProvider = ({ children }) => {
   );
 };
 
-// export const stateContext = () => useContext(StateContext);
+// export const useStateContext = () => useContext(StateContext);

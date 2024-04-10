@@ -7,16 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        $tokens = auth()->user()->tokens->map(function ($token) {
-            return $token->token;
-        });
-    
-        return response()->json([
-            'My Information' => auth()->user(),
-            'Tokens' => $tokens
-        ], 200);
+        return $request->user();
     }
 
     public function destroy()

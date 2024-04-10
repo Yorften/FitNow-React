@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use Illuminate\Support\Facades\Hash;
 
 class UserAuthController extends Controller
 {
@@ -13,43 +14,41 @@ class UserAuthController extends Controller
     {
         $validated = $request->validated();
 
-        User::create([
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
-        return response()->json([
-            'message' => 'User Created.',
-        ]);
+
+        $token = $user->createToken('AuthToken')->plainTextToken;
+    
+        return response(compact('token', 'user'));
     }
 
     public function login(LoginRequest $request)
     {
         $validated = $request->validated();
-        $user = User::where('email', $validated['email'])->first();
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
-            return response()->json([
-                'message' => 'Invalid Credentials'
-            ], 401);
+        if (!Auth::attempt($validated)) {
+            return response([
+                'message' => 'Email adress or password is incorrect']);
         }
-        if ($user->tokens()->exists()) {
-            return response()->json([
-                'access_token' => $user->tokens()->first()->token,
-            ]);
-        } else {
-            $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
+
+        /**  @var User */
+        $user = Auth::user();
+
+        if ($user->tokens()->delete()) {
+            $user->tokens()->delete();
         }
-        return response()->json([
-            'access_token' => $token,
-        ]);
+
+        $token = $user->createToken('AuthToken')->plainTextToken;
+    
+        return response(compact('token', 'user'));
     }
 
     public function logout()
     {
         /** @disregard P1013  | tokens() marked as undefined but it works fine **/
         auth()->user()->tokens()->delete();
-        return response()->json([
-            "message" => "Logged Out"
-        ]);
+        return response('', 204);
     }
 }

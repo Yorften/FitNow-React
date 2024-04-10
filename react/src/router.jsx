@@ -5,9 +5,10 @@ import DashboardLayout from "./components/layouts/DashboardLayout";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import NotFound from "./views/NotFound";
-import Index from './views/dashboard/sessions/Index';
-import CreateSession from './views/dashboard/sessions/CreateSession';
-import ShowSession from './views/dashboard/sessions/ShowSession';
+import Index from "./views/dashboard/sessions/Index";
+import Create from "./views/dashboard/sessions/Create";
+import Show from "./views/dashboard/sessions/Show";
+import Edit from "./views/dashboard/sessions/Edit";
 
 const router = createBrowserRouter([
   {
@@ -37,14 +38,18 @@ const router = createBrowserRouter([
 
       {
         path: "/dashboard/sessions/create",
-        element: <CreateSession />,
+        element: <Create />,
       },
 
       {
         path: "/dashboard/sessions/:sessionId",
-        element: <ShowSession />,
+        element: <Show />,
       },
 
+      {
+        path: "/dashboard/sessions/edit/:sessionId",
+        element: <Edit />,
+      },
     ],
   },
 
