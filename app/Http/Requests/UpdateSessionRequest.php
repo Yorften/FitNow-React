@@ -29,6 +29,7 @@ class UpdateSessionRequest extends FormRequest
             'waist_measurement' => 'sometimes|numeric',
             'hips_measurement' => 'sometimes|numeric',
             'distance_run' => 'sometimes|integer',
+            'status' => 'sometimes|string',
         ];
     }
 }

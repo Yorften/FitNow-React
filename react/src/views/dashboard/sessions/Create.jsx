@@ -3,7 +3,7 @@ import axiosClient from "../../../axios-client";
 import Swal from "sweetalert2";
 import { Button, Label, TextInput } from "flowbite-react";
 
-export default function Index() {
+export default function Create() {
   const nameRef = useRef();
   const weightRef = useRef();
   const heightRef = useRef();

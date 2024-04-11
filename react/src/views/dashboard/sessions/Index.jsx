@@ -30,13 +30,14 @@ export default function Index() {
     axiosClient
       .delete("/sessions/" + id)
       .then(({ data }) => {
-        getSessions();
         Swal.fire({
           title: "Success!",
           html: data.message,
           icon: "success",
           confirmButtonText: "Ok",
         });
+        setLoading(true);
+        getSessions();
       })
       .catch((err) => {
         console.log(err);
@@ -64,33 +65,44 @@ export default function Index() {
               <span className='sr-only'>Edit</span>
             </Table.HeadCell>
           </Table.Head>
-          <Table.Body className='divide-y'>
-            {sessions.map((session, index) => (
-              <Table.Row
-                key={index}
-                className='bg-white dark:border-gray-700 dark:bg-gray-800'
-              >
-                <Table.Cell>{session.id}</Table.Cell>
-                <Table.Cell>{session.name}</Table.Cell>
-                <Table.Cell>{session.status}</Table.Cell>
-                <Table.Cell>{session.created_at}</Table.Cell>
-                <Table.Cell>
-                  <Link
-                    to={`/dashboard/sessions/edit/${session.id}`}
-                    className='font-medium text-cyan-600 hover:underline dark:text-cyan-500'
-                  >
-                    Edit
-                  </Link>
-                  <div
-                    className='font-medium text-red-600 hover:underline dark:text-red-500 cursor-pointer'
-                    onClick={() => deleteSession(session.id)}
-                  >
-                    Delete
-                  </div>
+          {loading && (
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell colSpan='5' className='text-xl text-center'>
+                  Loading...
                 </Table.Cell>
               </Table.Row>
-            ))}
-          </Table.Body>
+            </Table.Body>
+          )}
+          {!loading && (
+            <Table.Body className='divide-y'>
+              {sessions.map((session, index) => (
+                <Table.Row
+                  key={index}
+                  className='bg-white dark:border-gray-700 dark:bg-gray-800'
+                >
+                  <Table.Cell>{session.id}</Table.Cell>
+                  <Table.Cell>{session.name}</Table.Cell>
+                  <Table.Cell>{session.status}</Table.Cell>
+                  <Table.Cell>{session.created_at}</Table.Cell>
+                  <Table.Cell>
+                    <Link
+                      to={"/dashboard/sessions/" + session.id}
+                      className='font-medium text-cyan-600 hover:underline dark:text-cyan-500'
+                    >
+                      Edit
+                    </Link>
+                    <div
+                      className='font-medium text-red-600 hover:underline dark:text-red-500 cursor-pointer'
+                      onClick={() => deleteSession(session.id)}
+                    >
+                      Delete
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          )}
         </Table>
       </div>
     </>

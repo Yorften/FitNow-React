@@ -7,7 +7,6 @@ import Register from "./views/Register";
 import NotFound from "./views/NotFound";
 import Index from "./views/dashboard/sessions/Index";
 import Create from "./views/dashboard/sessions/Create";
-import Show from "./views/dashboard/sessions/Show";
 import Edit from "./views/dashboard/sessions/Edit";
 
 const router = createBrowserRouter([
@@ -42,12 +41,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/dashboard/sessions/:sessionId",
-        element: <Show />,
-      },
-
-      {
-        path: "/dashboard/sessions/edit/:sessionId",
+        path: "/dashboard/sessions/:id",
         element: <Edit />,
       },
     ],

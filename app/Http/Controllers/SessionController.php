@@ -13,7 +13,7 @@ class SessionController extends Controller
 
     public function index()
     {
-        $sessions = Session::where('user_id', Auth::id())->paginate(7);
+        $sessions = Session::where('user_id', Auth::id())->get();
 
         if (count($sessions) == 0) {
             return response()->json([
